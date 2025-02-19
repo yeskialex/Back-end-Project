@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+
+</head>
+<body>
+<div id="div_01" class="div_00">BOARD DETAIL</div>
+ID
+<input id="detail_user_id" type="text" readonly="readonly"/>
+USERNAME
+<input id="detail_user_username" type="text"/>
+NAME
+<input id="detail_user_name" type="text"/>
+
+<button onclick="detail_user()">detail</button>
+<button onclick="update_user()">update</button>
+<button onclick="delete_user()">delete</button>
+
+<script>
+    $( document ).ready(function() {
+        console.log( "ready!" );
+        detail_user();
+    });
+    function update_user(){
+
+        //url에서 id값 추출해오기!
+        let temp_url = window.location.href; // http://localhost:8080/user/detail/1?aerlael=222
+        let split_temp_url = temp_url.split('/');
+        let final_id = split_temp_url[split_temp_url.length - 1];
+        let split_q = final_id.split("?");
+        if(split_q.length > 0){
+            final_id = split_q[0];
+        }
+
+        $.ajax({
+            url: "/api/user",
+            type: "PUT",
+            contentType : 'application/json; charset=utf-8',
+            data: JSON.stringify({
+                id : final_id
+                ,username : $("#detail_user_username").val()
+                ,name : $("#detail_user_name").val()
+            }),
+            cache: false,
+            success: (obj_data, status, xhr)=>{
+                //!!!
+                alert(JSON.stringify(obj_data));
+            },
+            error: (obj_data, status, xhr)=>{
+                alert("error!!");
+                alert(JSON.stringify(obj_data));
+            }
+        });
+    }
+    function delete_user(){
+
+        //url에서 id값 추출해오기!
+        let temp_url = window.location.href; // http://localhost:8080/user/detail/1?aerlael=222
+        let split_temp_url = temp_url.split('/');
+        let final_id = split_temp_url[split_temp_url.length - 1];
+        let split_q = final_id.split("?");
+        if(split_q.length > 0){
+            final_id = split_q[0];
+        }
+
+        $.ajax({
+            url: "/api/user",
+            type: "DELETE",
+            contentType : 'application/json; charset=utf-8',
+            data: JSON.stringify({
+                id : final_id
+            }),
+            cache: false,
+            success: (obj_data, status, xhr)=>{
+                //!!!
+                alert(JSON.stringify(obj_data));
+            },
+            error: (obj_data, status, xhr)=>{
+                alert("error!!");
+                alert(JSON.stringify(obj_data));
+            }
+        });
+    }
+
+    function detail_user(){
+
+        //url에서 id값 추출해오기!
+        let temp_url = window.location.href; // http://localhost:8080/user/detail/1?aerlael=222
+        let split_temp_url = temp_url.split('/');
+        let final_id = split_temp_url[split_temp_url.length - 1];
+        let split_q = final_id.split("?");
+        if(split_q.length > 0){
+            final_id = split_q[0];
+        }
+
+        $.ajax({
+            url: "/api/user/detail",
+            type: "GET",
+            contentType : 'application/json; charset=utf-8',
+            data: {
+                id : final_id
+            },
+            cache: false,
+            success: (obj_data, status, xhr)=>{
+                //!!!
+                alert(JSON.stringify(obj_data));
+                let eachData = obj_data["detail"];
+                $("#detail_user_id").val(eachData['id']);
+                $("#detail_user_username").val(eachData['username']);
+                $("#detail_user_name").val(eachData['name']);
+
+            },
+            error: (obj_data, status, xhr)=>{
+                alert("error!!");
+                alert(JSON.stringify(obj_data));
+            }
+        });
+    }
+    /*alert(1);
+    let div_html = $("#div_01"); // => 0 or 1!!!!
+    let div_class = $(".div_00"); //0 od 1 2 3 4 ....
+    alert(div_html.html());*/
+
+</script>
+</body>
+</html>
